@@ -1,34 +1,34 @@
 # Exploratory Analysis of Rental Standards of Vancouver City
 * For anyone planning to move to Vancouver or even those living in Vancouver may need to analyse the details of rental and locations with additional information of facilities like hospitals, library, schools and other near it.
-* Similarly here I am planning to do descriptive analysis of the details of rentals in each location and also the exploratory analysis of rental units in each of these locations.
+* Similarly here I am planning to do exploratory analysis of the details of rentals in each location and also the exploratory analysis of rental units in each of these locations.
 * This is mainly to identify which of these areas have high rental units available throughout Vancouver.
 * The dataset taken by me is about the  “Rental Stanadards” segment of the “Property” module of the Vancouver city portal.
 * In this we have key features like the ‘Business Operators’, ‘Total Units’, ‘Total Outstanding Units’, ‘Street Number’,  ‘Street Name’ and other details.
-* The descriptive analysis is on “What is the percentage of number of available Rental  Business Operators in each Geo-areas of Vancouver?”.
+* The exploratory analysis is on “How many Business Operators operate in more than one geo location and how many units they manage?”.
 #### Dap Design
 ![image 001](https://github.com/user-attachments/assets/eaf89db3-722c-4b6a-b718-6792029bac32)<br>
 The above image displays the DAP design we are implementing for the descyptive analysis.
 #### Data Questions (Metric)
-Using the above dataset details we will be finding below details as part of our analysis of the descriptive metric:
-* Total available operators grouped based on the geo local area.
-* The total available operators in Vancouver city altogether.
-* Find the information on the percentage split of the operators from each geo local area in detail by dividing the available operators in each geo local are with that of the total available operators in Vancouver.
-* Below I mentioned the 4 step process involved in the DAP design related to the descriptive question posted above analysis (highlighted and underlined).
+Using the above dataset details we will be finding below details as part of our analysis of the exploratory metric:
+* Find the total geo local areas of an operator.
+* The total count of units managed by these business operators.
+* Merge the collective information of these people and only display the information of those who operate in more than one geo local area.
+* Below I mentioned the 4 step process involved in the DAP design related to the exploratory question posted above analysis (highlighted and underlined).
 * We are going to use the AWS services like S3, Glue, Glue DataBrew as per our need to store the results and other details of the project.
-#### Descriptive  Question for Analysis
-* The primary need of this project is to conduct a descriptive and Exploratory Analysis of Vancouver City rental standards based on the datasets taken from City of Vancouver Open Data Portal.
+#### exploratory  Question for Analysis
+* The primary need of this project is to conduct a exploratory and Exploratory Analysis of Vancouver City rental standards based on the datasets taken from City of Vancouver Open Data Portal.
 * The hope with this question was to gain insight into how accessible the rental properties are in Vancouver City.
-* As informed earlier the dataset select by me is about the “Rental Standards”. Here the descriptive metric Ajayi planned to analyse is about “What is the percentage of number of available Rental Business Operators in each Geo-areas of Vancouver?”
+* As informed earlier the dataset select by me is about the “Rental Standards”. Here the exploratory metric Ajayi planned to analyse is about “How many Business Operators operate in more than one geo location and how many units they manage?”
 * For this the dataset select is the “Rental Standards” from the City of Vancouver Open Data Portal website.
 * This dataset has information of the Business operator, their url, the business address details(like Business Operators, Details url, street name and others), the outstanding units and total units. I selected the dataset related to rentals in Vancouver.
 * I selected to work on the rental agencies in different areas of Vancouver.
 * This second part of the DAP design includes the next process of DAP that is once the needed analysis data is available after Glue pipeline design.
 * This included multiple details and segments discussed below.
-![image 000](https://github.com/user-attachments/assets/a70419bf-6d2f-44d0-a09d-436113eee21f)<br>
-The above images displays the descryptive analysis of our DAP model. 
+![image 000-1](https://github.com/user-attachments/assets/0acbc98a-8ff7-4ea5-bd76-837b0204508c)<br>
+The above images displays the exploratory analysis of our DAP model. 
 #### Step 1: Data Ingestion
 * This step explains about the Data ingestion into AWS Environment.
-* Previously we decided that the descriptive metric is “What is the percentage of number of available Rental  Business Operators in each Geo-areas of Vancouver?”.
+* Previously we decided that the exploratory metric is “How many Business Operators operate in more than one geo location and how many units they manage?”.
 * We also took the details of dataset from the ‘Vancouver.ca’ website. Now we decide how we are going to make them available for in the AWS portal for usage and also for analysis purpose.
 * To do this the solution we have is ‘S3’ buckets. We are going to create 2 buckets namely “vrs-raw-ajayi” and “vrs-transformed-ajayi”.
 * The bucket “vrs-raw-ajayi” stores the raw data taken from the ‘Vancouver.ca’ website and “vrs-transformed-ajayi” stores the cleaned and transformed datasets.
@@ -81,3 +81,23 @@ The above image displays the DAP design we are implementing for the descyptive a
 ![image 008-1](https://github.com/user-attachments/assets/46d7e401-7bdf-4ca0-a852-4739957235b5)<br>
 * The above image shows the details of data cleaning job created.
 * The final results after the ‘vrs-cleaning-job-ajayi’ are stored in the ‘Data-cleaning’ folder inside the ‘vrs-transformed-ajayi’ bucket inside S3.
+#### Step 4: Data Pipeline Design 
+* Once the cleaning is done on the data we will now create an ETL pipeline for transforming the data.
+* This is to ensure the validity of data is guaranteed and trusted. We named the pipeline as “vrs-exploratory-pipeline-ajayi” in AWS Glue.
+* In the ETL pipeline there are multiple function we will be using. First step is to load the cleaned datasets into the console. The second step is to drop unwanted columns and select only those in need.
+* In my case we selected information on Business Operators, Outstanding Units, Total Units, Geo Local Area.
+* We then split into two step in 3rd stage  initially where we calculate the total geo local area a business operator is at and the other where we calculate the total units managed by a business operator.
+![image 010](https://github.com/user-attachments/assets/cf3a1107-224d-4bd5-bf19-9499d716fc4d)<br>
+* The above image displays the ETL pipeline information.
+![image 011](https://github.com/user-attachments/assets/a9baa531-fe90-4b85-8abe-f1403e27a879)<br>
+* The above image displays the end results of the analysis using ETL pipeline.
+![image 012](https://github.com/user-attachments/assets/fbe7be38-889e-4b11-bc0d-91a1e8cfd813)<br>
+* The above image displays job run results of the analysis using ETL pipeline.
+![image 013](https://github.com/user-attachments/assets/758d4125-9c17-4130-8d1d-c5012244659e)<br>
+* The above image displays the ETL results stored in the buckets inside folder "Outstanding Units".
+![image 014](https://github.com/user-attachments/assets/89b35bd5-9e53-4ace-9578-5399cbdf7794)<br>
+* The above image displays the ETL results stored in the buckets inside folder "Geo Area".
+* Next comes the case where we need to join these 2 split steps in 3rd stage together in the 4th stage using join function.
+* We can select the needed details by filtering the count of ‘Geo Local Area’ of each business operators and select only those who operate in more than one location.
+* We can then store these calculated values and the whole information by using the partition keys in respective locations.
+* The outputs of ‘vrs-exploratory-pipeline-ajayi’ job stored in ‘Geo_area’ folder in the ‘vrs-transformed-ajayi’ bucket.
